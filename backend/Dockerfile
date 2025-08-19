@@ -3,8 +3,8 @@ FROM python:3.11-slim
 WORKDIR /app
 COPY . .
 
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir -r requirements-rag.txt
+# Install all dependencies from single requirements file
+RUN pip install --no-cache-dir -r requirements.txt
 
 ENV PORT=5000
 ENV CORS_ORIGINS=http://localhost:3000

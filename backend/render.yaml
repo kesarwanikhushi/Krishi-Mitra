@@ -12,21 +12,6 @@ services:
       - key: FLASK_ENV
         value: production
       - key: CORS_ORIGINS
-        value: https://krishi-mitra-frontend-dun.vercel.app
-    healthCheckPath: /health
-    autoDeploy: truepe: web
-    name: krishi-mitra-backend
-    env: docker
-    plan: free
-    dockerfilePath: ./Dockerfile
-    envVars:
-      - key: PORT
-        value: 10000
-      - key: HOST
-        value: 0.0.0.0
-      - key: FLASK_ENV
-        value: production
-      - key: CORS_ORIGINS
-        value: https://krishi-mitra-frontend.vercel.app,https://krishi-mitra-frontend-git-main-kesarwanikhushis-projects.vercel.app
+        value: https://krishi-mitra-frontend-dun.vercel.app,https://krishi-mitra-frontend.vercel.app,https://krishi-mitra-frontend-git-main-kesarwanikhushis-projects.vercel.app
     healthCheckPath: /health
     autoDeploy: true
