@@ -152,7 +152,7 @@ def calculate_confidence(response_text, question, language='english'):
 
 def format_gemini_response(text):
     """
-    Format Gemini response text for better readability in chat interface
+    Format Gemini response text for better readability in chat interface with emojis and proper structure
     """
     if not text:
         return text
@@ -162,24 +162,75 @@ def format_gemini_response(text):
     # Clean up the text
     formatted = text.strip()
     
-    # Convert **bold text** to proper formatting (keep asterisks for now since frontend might handle it)
-    # formatted = re.sub(r'\*\*(.*?)\*\*', r'**\1**', formatted)  # Keep markdown bold
+    # Add emoji mappings for agricultural topics
+    emoji_mappings = {
+        r'\b(crops?|farming|agriculture|agricultural)\b': '🌾',
+        r'\b(seed|seeds|planting|sowing)\b': '🌱',
+        r'\b(harvest|harvesting)\b': '🌽',
+        r'\b(fertilizer|fertilizers|nutrients?)\b': '💊',
+        r'\b(pesticide|pesticides|insecticide|pest control)\b': '🛡️',
+        r'\b(irrigation|water|watering)\b': '💧',
+        r'\b(soil|ground|earth)\b': '🌍',
+        r'\b(weather|climate|temperature|rain|sunshine)\b': '☀️',
+        r'\b(disease|diseases|infection)\b': '🦠',
+        r'\b(growth|growing|development)\b': '📈',
+        r'\b(organic|natural)\b': '🌿',
+        r'\b(market|price|sell|selling)\b': '💰',
+        r'\b(equipment|tools?|machinery)\b': '🔧',
+        r'\b(advice|tip|tips|recommendation)\b': '💡',
+        r'\b(warning|caution|avoid|careful)\b': '⚠️',
+        r'\b(important|crucial|essential)\b': '❗',
+        r'\b(good|excellent|best|optimal)\b': '✅',
+        r'\b(problem|issue|difficulty)\b': '❌'
+    }
+    
+    # Apply emoji mappings (case insensitive)
+    for pattern, emoji in emoji_mappings.items():
+        # Only add emoji if the word doesn't already have an emoji nearby
+        formatted = re.sub(f'(?<!{emoji} )(?<!{emoji}){pattern}(?!.*{emoji})', f'{emoji} \\g<0>', formatted, flags=re.IGNORECASE)
+    
+    # Convert **bold text** to proper HTML-like formatting for frontend
+    formatted = re.sub(r'\*\*(.*?)\*\*', r'**\1**', formatted)
+    
+    # Clean up standalone asterisks that aren't part of formatting
+    formatted = re.sub(r'(?<!\*)\*(?!\*)(?!\s*\*)', '', formatted)
+    
+    # Add horizontal dividers and section formatting
+    # Add divider before major sections
+    major_sections = [
+        r'(\*\*(?:Key Points?|Main Points?|Important|Summary|In Summary|Conclusion|Recommendations?|Advice|Tips?|Steps?|Process|Method|Procedure).*?\*\*)',
+        r'(\*\*(?:What to Do|How to|When to|Where to|Why|Benefits?|Advantages?|Disadvantages?|Pros?|Cons?).*?\*\*)',
+        r'(\*\*(?:Materials? Needed|Requirements?|Equipment|Tools? Required|Supplies?).*?\*\*)',
+        r'(\*\*(?:Timing|Schedule|Calendar|Season|Month|Week).*?\*\*)',
+        r'(\*\*(?:Cost|Price|Budget|Economics?).*?\*\*)',
+        r'(\*\*(?:Avoid|Don\'t|Never|Warning|Caution|Risk).*?\*\*)',
+        r'(\*\*(?:Sustainable|Organic|Natural|Environmental).*?\*\*)'
+    ]
+    
+    for section_pattern in major_sections:
+        formatted = re.sub(section_pattern, r'\n\n---\n\n\1', formatted, flags=re.IGNORECASE)
+    
+    # Add section headers with emojis
+    formatted = re.sub(r'\*\*(Key Points?.*?)\*\*', r'📋 **\1**', formatted, flags=re.IGNORECASE)
+    formatted = re.sub(r'\*\*(Summary.*?)\*\*', r'📝 **\1**', formatted, flags=re.IGNORECASE)
+    formatted = re.sub(r'\*\*(Recommendations?.*?)\*\*', r'💡 **\1**', formatted, flags=re.IGNORECASE)
+    formatted = re.sub(r'\*\*(Steps?.*?)\*\*', r'📋 **\1**', formatted, flags=re.IGNORECASE)
+    formatted = re.sub(r'\*\*(Materials?.*?)\*\*', r'🛠️ **\1**', formatted, flags=re.IGNORECASE)
+    formatted = re.sub(r'\*\*(Timing.*?)\*\*', r'⏰ **\1**', formatted, flags=re.IGNORECASE)
+    formatted = re.sub(r'\*\*(Benefits?.*?)\*\*', r'✅ **\1**', formatted, flags=re.IGNORECASE)
+    formatted = re.sub(r'\*\*(Avoid.*?|Warning.*?)\*\*', r'⚠️ **\1**', formatted, flags=re.IGNORECASE)
     
     # Add line breaks before numbered sections
     formatted = re.sub(r'(\*\*\d+\.)', r'\n\n\1', formatted)
+    formatted = re.sub(r'(?<!\n)(\d+\.(?!\d))', r'\n• \1', formatted)  # Convert numbered lists to bullet points with emoji
     
-    # Add line breaks before bullet points
+    # Enhance bullet points
     formatted = re.sub(r'(\* \*\*)', r'\n\n\1', formatted)
-    formatted = re.sub(r'((?<!\n)\* )', r'\n\1', formatted)
+    formatted = re.sub(r'((?<!\n)\* )', r'\n• ', formatted)  # Convert * to bullet emoji
+    formatted = re.sub(r'^(\* )', r'• ', formatted, flags=re.MULTILINE)  # Convert line-starting * to bullet emoji
     
     # Add line breaks after colons when they introduce lists or sections
     formatted = re.sub(r'(\*\*.*?:\*\*)', r'\1\n', formatted)
-    
-    # Add proper spacing around "Avoid:" sections
-    formatted = re.sub(r'(\*\*Avoid:\*\*)', r'\n\n\1', formatted)
-    
-    # Add line breaks before "In summary:" or similar concluding sections
-    formatted = re.sub(r'(\*\*In summary:\*\*)', r'\n\n\1', formatted)
     
     # Ensure proper paragraph breaks after sentences that end sections
     formatted = re.sub(r'(\.) (\*\*[A-Z])', r'\1\n\n\2', formatted)
@@ -187,11 +238,12 @@ def format_gemini_response(text):
     # Clean up multiple consecutive line breaks
     formatted = re.sub(r'\n{3,}', '\n\n', formatted)
     
-    # Ensure there's spacing after bullet points
-    formatted = re.sub(r'(\* )([^\n])', r'\1\2', formatted)
-    
     # Add spacing before important sections that start with capital letters
     formatted = re.sub(r'([a-z]\.)(?: )([A-Z][^*])', r'\1\n\n\2', formatted)
+    
+    # Add conclusion divider if there's a concluding paragraph
+    if re.search(r'(in conclusion|finally|to summarize|overall|remember)', formatted, re.IGNORECASE):
+        formatted = re.sub(r'(.*?(?:in conclusion|finally|to summarize|overall|remember).*)', r'\n\n---\n\n🎯 \1', formatted, flags=re.IGNORECASE)
     
     return formatted.strip()
 
@@ -389,12 +441,24 @@ def advice():
                 
                 # Language-specific system prompts for Gemini
                 system_prompts = {
-                    'hindi': f"आप एक कृषि विशेषज्ञ हैं। किसानों को हिंदी में सटीक और व्यावहारिक सलाह दें। कृपया अपना उत्तर अच्छी तरह से व्यवस्थित करें, मुख्य बिंदुओं को बोल्ड में लिखें, और सूची का उपयोग करें। प्रश्न: {question}",
-                    'bengali': f"আপনি একজন কৃষি বিশেষজ্ঞ। কৃষকদের বাংলায় সঠিক এবং ব্যবহারিক পরামর্শ দিন। দয়া করে আপনার উত্তর ভালভাবে সংগঠিত করুন, মূল পয়েন্টগুলি বোল্ড করুন এবং তালিকা ব্যবহার করুন। প্রশ্ন: {question}",
-                    'gujarati': f"તમે એક કૃષિ નિષ્ણાત છો। ખેડૂતોને ગુજરાતીમાં સચોટ અને વ્યવહારિક સલાહ આપો। કૃપા કરીને તમારા જવાબને સારી રીતે ગોઠવો, મુખ્ય મુદ્દાઓને બોલ્ડ કરો અને સૂચિનો ઉપયોગ કરો। પ્રશ્ન: {question}",
-                    'punjabi': f"ਤੁਸੀਂ ਇੱਕ ਖੇਤੀਬਾੜੀ ਮਾਹਰ ਹੋ। ਕਿਸਾਨਾਂ ਨੂੰ ਪੰਜਾਬੀ ਵਿੱਚ ਸਟੀਕ ਅਤੇ ਵਿਹਾਰਕ ਸਲਾਹ ਦਿਓ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਜਵਾਬ ਨੂੰ ਚੰਗੀ ਤਰ੍ਹਾਂ ਸੰਗਠਿਤ ਕਰੋ, ਮੁੱਖ ਨੁਕਤਿਆਂ ਨੂੰ ਬੋਲਡ ਕਰੋ ਅਤੇ ਸੂਚੀਆਂ ਦੀ ਵਰਤੋਂ ਕਰੋ। ਸਵਾਲ: {question}",
-                    'arabic': f"أنت خبير زراعي. قدم نصائح دقيقة وعملية للمزارعين باللغة العربية. يرجى تنظيم إجابتك بشكل جيد، واجعل النقاط الرئيسية بخط عريض، واستخدم القوائم. السؤال: {question}",
-                    'english': f"You are an agricultural expert. Provide accurate and practical advice to farmers in English. Please format your response well with clear paragraphs, use **bold** for main points, bullet points for lists, and organize information clearly. Question: {question}"
+                    'hindi': f"आप एक कृषि विशेषज्ञ हैं। किसानों को हिंदी में सटीक और व्यावहारिक सलाह दें। कृपया अपना उत्तर इस तरह व्यवस्थित करें:\n- मुख्य बिंदुओं को **बोल्ड** में लिखें\n- सूची और बुलेट पॉइंट का उपयोग करें\n- अलग-अलग सेक्शन बनाएं\n- महत्वपूर्ण सुझावों के लिए इमोजी का उपयोग करें\n- स्पष्ट शीर्षक दें\n\nप्रश्न: {question}",
+                    'bengali': f"আপনি একজন কৃষি বিশেষজ্ঞ। কৃষকদের বাংলায় সঠিক এবং ব্যবহারিক পরামর্শ দিন। দয়া করে আপনার উত্তর এভাবে সংগঠিত করুন:\n- মূল পয়েন্টগুলি **বোল্ড** করুন\n- তালিকা এবং বুলেট পয়েন্ট ব্যবহার করুন\n- বিভিন্ন বিভাগ তৈরি করুন\n- গুরুত্বপূর্ণ পরামর্শের জন্য ইমোজি ব্যবহার করুন\n- স্পষ্ট শিরোনাম দিন\n\nপ্রশ্ন: {question}",
+                    'gujarati': f"તમે એક કૃષિ નિષ્ણાત છો। ખેડૂતોને ગુજરાતીમાં સચોટ અને વ્યવહારિક સલાહ આપો। કૃપા કરીને તમારા જવાબને આ રીતે ગોઠવો:\n- મુખ્ય મુદ્દાઓને **બોલ્ડ** કરો\n- સૂચિ અને બુલેટ પોઇન્ટનો ઉપયોગ કરો\n- વિવિધ વિભાગો બનાવો\n- મહત્વપૂર્ણ સૂચનાઓ માટે ઇમોજીનો ઉપયોગ કરો\n- સ્પષ્ટ શીર્ષકો આપો\n\nપ્રશ્ન: {question}",
+                    'punjabi': f"ਤੁਸੀਂ ਇੱਕ ਖੇਤੀਬਾੜੀ ਮਾਹਰ ਹੋ। ਕਿਸਾਨਾਂ ਨੂੰ ਪੰਜਾਬੀ ਵਿੱਚ ਸਟੀਕ ਅਤੇ ਵਿਹਾਰਕ ਸਲਾਹ ਦਿਓ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਜਵਾਬ ਨੂੰ ਇਸ ਤਰ੍ਹਾਂ ਸੰਗਠਿਤ ਕਰੋ:\n- ਮੁੱਖ ਨੁਕਤਿਆਂ ਨੂੰ **ਬੋਲਡ** ਕਰੋ\n- ਸੂਚੀਆਂ ਅਤੇ ਬੁਲੇਟ ਪੁਆਇੰਟਾਂ ਦੀ ਵਰਤੋਂ ਕਰੋ\n- ਵੱਖ-ਵੱਖ ਭਾਗ ਬਣਾਓ\n- ਮਹੱਤਵਪੂਰਨ ਸੁਝਾਵਾਂ ਲਈ ਇਮੋਜੀ ਦੀ ਵਰਤੋਂ ਕਰੋ\n- ਸਪਸ਼ਟ ਸਿਰਲੇਖ ਦਿਓ\n\nਸਵਾਲ: {question}",
+                    'arabic': f"أنت خبير زراعي. قدم نصائح دقيقة وعملية للمزارعين باللغة العربية। يرجى تنظيم إجابتك بهذا الشكل:\n- اجعل النقاط الرئيسية **عريضة**\n- استخدم القوائم والنقاط النقطية\n- أنشئ أقساماً مختلفة\n- استخدم الرموز التعبيرية للنصائح المهمة\n- أعط عناوين واضحة\n\nالسؤال: {question}",
+                    'english': f"""You are an agricultural expert. Provide accurate and practical advice to farmers in English. 
+
+Please structure your response with:
+- Use **bold** for main headings and important points
+- Create clear sections with descriptive headings
+- Use bullet points and numbered lists for clarity
+- Include relevant emojis for visual appeal and easy reading
+- Organize information logically (e.g., **Key Points**, **Steps**, **Materials Needed**, **Tips**, **Things to Avoid**)
+- End with a brief **Summary** if the response is long
+
+Make your response visually appealing and easy to scan. Use formatting to help farmers quickly find the information they need.
+
+Question: {question}"""
                 }
                 
                 prompt = system_prompts.get(language, system_prompts['english'])
@@ -517,19 +581,138 @@ def advice():
         
         # Fallback to sample responses if no API key or error
         language_responses = {
-            'hindi': f"आपके प्रश्न के लिए धन्यवाद: '{question}'। यह कृषि मित्र AI सहायक का एक नमूना उत्तर है। बेहतर उत्तर के लिए, कृपया Gemini या OpenAI API key सेट करें।",
-            'bengali': f"আপনার প্রশ্নের জন্য ধন্যবাদ: '{question}'। এটি কৃষি মিত্র AI সহায়কের একটি নমুনা উত্তর। আরও ভাল উত্তরের জন্য, দয়া করে Gemini বা OpenAI API কী সেট করুন।",
-            'gujarati': f"તમારા પ્રશ્ન માટે આભાર: '{question}'। આ કૃષિ મિત્ર AI સહાયકનો એક નમૂનો જવાબ છે। વધુ સારા જવાબ માટે, કૃપા કરીને Gemini અથવા OpenAI API કી સેટ કરો।",
-            'punjabi': f"ਤੁਹਾਡੇ ਸਵਾਲ ਲਈ ਧੰਨਵਾਦ: '{question}'। ਇਹ ਕ੍ਰਿਸ਼ੀ ਮਿੱਤਰ AI ਸਹਾਇਕ ਦਾ ਇੱਕ ਨਮੂਨਾ ਜਵਾਬ ਹੈ। ਬਿਹਤਰ ਜਵਾਬ ਲਈ, ਕਿਰਪਾ ਕਰਕੇ Gemini ਜਾਂ OpenAI API ਕੁੰਜੀ ਸੈੱਟ ਕਰੋ।",
-            'arabic': f"شكرا لك على سؤالك: '{question}'. هذا رد نموذجي من مساعد كريشي ميترا الذكي. للحصول على إجابات أفضل، يرجى تعيين مفتاح Gemini أو OpenAI API.",
-            'english': f"Thank you for your question: '{question}'. This is a sample response from the Krishi Mitra AI assistant. For better responses, please set up your Gemini or OpenAI API key."
+            'hindi': f"""🌾 **कृषि मित्र AI सहायक**
+
+आपके प्रश्न के लिए धन्यवाद: '{question}'
+
+---
+
+📋 **यह एक नमूना उत्तर है**
+
+• यह कृषि मित्र AI सहायक का एक डेमो रिस्पॉन्स है
+• बेहतर और विस्तृत उत्तर के लिए API key आवश्यक है
+• वास्तविक AI-powered सलाह के लिए Gemini या OpenAI API key सेट करें
+
+---
+
+💡 **सुझाव**
+
+• स्थानीय कृषि विशेषज्ञों से सलाह लें
+• अपने क्षेत्र के अनुकूल तकनीकों का प्रयोग करें""",
+            
+            'bengali': f"""🌾 **কৃষি মিত্র AI সহায়ক**
+
+আপনার প্রশ্নের জন্য ধন্যবাদ: '{question}'
+
+---
+
+📋 **এটি একটি নমুনা উত্তর**
+
+• এটি কৃষি মিত্র AI সহায়কের একটি ডেমো রেসপন্স
+• আরও ভাল এবং বিস্তারিত উত্তরের জন্য API key প্রয়োজন
+• প্রকৃত AI-powered পরামর্শের জন্য Gemini বা OpenAI API key সেট করুন
+
+---
+
+💡 **পরামর্শ**
+
+• স্থানীয় কৃষি বিশেষজ্ঞদের পরামর্শ নিন
+• আপনার অঞ্চলের উপযুক্ত প্রযুক্তি ব্যবহার করুন""",
+            
+            'gujarati': f"""🌾 **કૃષિ મિત્ર AI સહાયક**
+
+તમારા પ્રશ્ન માટે આભાર: '{question}'
+
+---
+
+📋 **આ એક નમૂનો જવાબ છે**
+
+• આ કૃષિ મિત્ર AI સહાયકનો એક ડેમો રિસ્પોન્સ છે
+• વધુ સારા અને વિગતવાર જવાબ માટે API key જરૂરી છે
+• વાસ્તવિક AI-powered સલાહ માટે Gemini અથવા OpenAI API key સેટ કરો
+
+---
+
+💡 **સૂચન**
+
+• સ્થાનિક કૃષિ નિષ્ણાતોની સલાહ લો
+• તમારા વિસ્તાર અનુકૂળ તકનીકોનો ઉપયોગ કરો""",
+            
+            'punjabi': f"""🌾 **ਕ੍ਰਿਸ਼ੀ ਮਿੱਤਰ AI ਸਹਾਇਕ**
+
+ਤੁਹਾਡੇ ਸਵਾਲ ਲਈ ਧੰਨਵਾਦ: '{question}'
+
+---
+
+📋 **ਇਹ ਇੱਕ ਨਮੂਨਾ ਜਵਾਬ ਹੈ**
+
+• ਇਹ ਕ੍ਰਿਸ਼ੀ ਮਿੱਤਰ AI ਸਹਾਇਕ ਦਾ ਇੱਕ ਡੈਮੋ ਰਿਸਪਾਂਸ ਹੈ
+• ਬਿਹਤਰ ਅਤੇ ਵਿਸਤ੍ਰਿਤ ਜਵਾਬ ਲਈ API key ਲੋੜੀਂਦੀ ਹੈ
+• ਅਸਲ AI-powered ਸਲਾਹ ਲਈ Gemini ਜਾਂ OpenAI API key ਸੈੱਟ ਕਰੋ
+
+---
+
+💡 **ਸੁਝਾਅ**
+
+• ਸਥਾਨਕ ਖੇਤੀਬਾੜੀ ਮਾਹਰਾਂ ਤੋਂ ਸਲਾਹ ਲਓ
+• ਆਪਣੇ ਖੇਤਰ ਅਨੁਕੂਲ ਤਕਨੀਕਾਂ ਦੀ ਵਰਤੋਂ ਕਰੋ""",
+            
+            'arabic': f"""🌾 **مساعد كريشي ميترا الذكي**
+
+شكرا لك على سؤالك: '{question}'
+
+---
+
+📋 **هذا رد نموذجي**
+
+• هذا رد توضيحي من مساعد كريشي ميترا الذكي
+• للحصول على إجابات أفضل وأكثر تفصيلاً يتطلب API key
+• للحصول على نصائح AI حقيقية، يرجى تعيين مفتاح Gemini أو OpenAI API
+
+---
+
+💡 **نصائح**
+
+• استشر خبراء الزراعة المحليين
+• استخدم التقنيات المناسبة لمنطقتك""",
+            
+            'english': f"""🌾 **Krishi Mitra AI Assistant**
+
+Thank you for your question: '{question}'
+
+---
+
+📋 **This is a Sample Response**
+
+• This is a demo response from the Krishi Mitra AI assistant
+• For better and detailed responses, API key setup is required
+• For real AI-powered agricultural advice, please set up your Gemini or OpenAI API key
+
+---
+
+💡 **Recommendations**
+
+• Consult with local agricultural experts
+• Use region-specific farming techniques
+• Test any new methods on a small scale first
+
+---
+
+🔧 **Setup Instructions**
+
+• Get your free Gemini API key from Google AI Studio
+• Or set up OpenAI API key for enhanced responses
+• Configure the API key in your environment variables"""
         }
         
         response_text = language_responses.get(language, language_responses['english'])
         
+        # Apply formatting to sample responses as well
+        formatted_response = format_gemini_response(response_text)
+        
         return jsonify({
-            'advice': response_text,
-            'answer': response_text,
+            'advice': formatted_response,
+            'answer': formatted_response,
             'status': 'success',
             'language': language,
             'detectedLanguage': preferred_language,

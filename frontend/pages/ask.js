@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import ConfidenceBadge from '../components/ConfidenceBadge';
+import FormattedMessage from '../components/FormattedMessage';
 
 export default function Ask() {
   const { t, ready } = useTranslation();
@@ -736,7 +737,11 @@ export default function Ask() {
                     }}
                   >
                     <div style={{ fontSize: '0.95rem', lineHeight: '1.5' }}>
-                      {message.content || 'No content'}
+                      {message.type === 'user' ? (
+                        message.content || 'No content'
+                      ) : (
+                        <FormattedMessage content={message.content || 'No content'} type={message.type} />
+                      )}
                     </div>
                     
                     {/* Confidence Badge for bot messages */}

@@ -252,6 +252,124 @@ body {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Formatted Message Styles */
+.formatted-message {
+  line-height: 1.6;
+}
+
+.formatted-message h5 {
+  color: var(--secondary-green) !important;
+  font-weight: 700 !important;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  border-bottom: 2px solid var(--primary-green);
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.formatted-message h5:first-child {
+  margin-top: 0;
+}
+
+.formatted-message h6 {
+  color: #1976d2 !important;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-color: var(--primary-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.formatted-message h6:first-child {
+  margin-top: 0;
+}
+
+.formatted-message p {
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+  text-align: justify;
+  line-height: 1.6;
+}
+
+.formatted-message strong {
+  color: var(--secondary-green) !important;
+  font-weight: 600 !important;
+}
+
+.formatted-message mark {
+  background-color: #e8f5e8 !important;
+  color: var(--secondary-green) !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  border: 1px solid #c8e6c9;
+}
+
+.formatted-message .section {
+  margin-bottom: 1.5rem;
+}
+
+.formatted-message .section-divider {
+  margin: 2rem 0;
+}
+
+.formatted-message .section-divider hr {
+  border: none;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-green) 0%, #81c784 50%, var(--primary-green) 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+}
+
+/* Enhanced bullet point styling */
+.formatted-message div[style*="paddingLeft"] {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+  padding-left: 1.5rem;
+}
+
+.formatted-message div[style*="paddingLeft"] span:first-child {
+  color: var(--primary-green);
+  margin-right: 10px;
+  margin-top: 0.1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Emoji spacing and sizing */
+.formatted-message span[style*="marginRight"] {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+/* Responsive text for mobile */
+@media (max-width: 768px) {
+  .formatted-message {
+    font-size: 0.9rem;
+  }
+  
+  .formatted-message h5 {
+    font-size: 1rem;
+  }
+  
+  .formatted-message h6 {
+    font-size: 0.95rem;
+  }
+  
+  .formatted-message div[style*="paddingLeft"] {
+    padding-left: 1rem;
+  }
+}
+
 /* Responsive Enhancements */
 @media (max-width: 768px) {
   .interactive-card:hover {
