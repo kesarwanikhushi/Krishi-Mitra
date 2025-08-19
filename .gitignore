@@ -265,3 +265,6 @@ dist/
 # -------------------------
 .DS_Store
 *.pem
+
+# Nested git repositories (prevent submodule issues)
+*/.git/
