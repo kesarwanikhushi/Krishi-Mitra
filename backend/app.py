@@ -2,6 +2,7 @@
 import os
 import json
 import csv
+import re
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from functools import wraps
@@ -265,13 +266,45 @@ def rate_limiter(max_per_minute=30):
 app = Flask(__name__)
 
 # Configure CORS for both development and production
-CORS(app, origins=["https://krishi-mitra-eight-delta.vercel.app"])
+allowed_origins = [
+    "http://localhost:3000",  # Local development
+    "http://localhost:3001",  # Alternative local port
+    "https://krishi-mitra-eight-delta.vercel.app",  # Production frontend
+    "https://krishi-mitra-jwqy.onrender.com",  # Backend on Render (for testing)
+]
 
-# Add environment variable for production CORS origins
+# Add environment variable support for additional CORS origins
+env_origins = os.getenv('CORS_ORIGINS', '')
+if env_origins:
+    additional_origins = [origin.strip() for origin in env_origins.split(',')]
+    allowed_origins.extend(additional_origins)
 
 # Add wildcard support for Vercel domains
+import re
+vercel_pattern = r'https://.*\.vercel\.app$'
 
-     # Enable regex support for wildcard domains
+def is_vercel_domain(origin):
+    return re.match(vercel_pattern, origin) is not None
+
+# Custom CORS configuration with pattern matching
+CORS(app, 
+     origins=allowed_origins,
+     supports_credentials=True,
+     allow_headers=['Content-Type', 'Authorization', 'Origin', 'Accept'],
+     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
+
+# Custom CORS handler for wildcard Vercel domains
+@app.after_request
+def after_request(response):
+    origin = request.headers.get('Origin')
+    if origin:
+        # Check if origin is in allowed list or matches Vercel pattern
+        if origin in allowed_origins or is_vercel_domain(origin):
+            response.headers['Access-Control-Allow-Origin'] = origin
+            response.headers['Access-Control-Allow-Credentials'] = 'true'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, Origin, Accept'
+            response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    return response
 
 
 # Handle data directory path for both local development and Docker deployment
@@ -319,7 +352,9 @@ def health():
     return jsonify({
         'status': 'ok',
         'timestamp': time(),
-        'environment': os.getenv('FLASK_ENV', 'development')
+        'environment': os.getenv('FLASK_ENV', 'development'),
+        'cors_origins': allowed_origins,
+        'vercel_pattern': vercel_pattern
     })
 
 @app.route('/test', methods=['GET', 'POST'])
