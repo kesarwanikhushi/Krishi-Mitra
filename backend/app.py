@@ -270,16 +270,25 @@ cors_origins = [
     "http://localhost:3001",
     "http://localhost:3002",
     "https://krishi-mitra-frontend-dun.vercel.app",
-    "https://*.vercel.app"
+    "https://krishi-mitra-frontend.vercel.app",
+    "https://krishi-mitra-frontend-git-main-kesarwanikhushis-projects.vercel.app",
+    # Add patterns for common Vercel deployment URLs
+    "https://krishi-mitra-*.vercel.app",
+    "https://krishi-mitra-frontend-*.vercel.app"
 ]
 
 # Add environment variable for production CORS origins
 if os.getenv('CORS_ORIGINS'):
     cors_origins.extend(os.getenv('CORS_ORIGINS').split(','))
 
+# Add wildcard support for Vercel domains
+cors_origins.append("https://*.vercel.app")
+
 CORS(app, origins=cors_origins, supports_credentials=True, 
      allow_headers=['Content-Type', 'Authorization'], 
-     methods=['GET', 'POST', 'OPTIONS'])
+     methods=['GET', 'POST', 'OPTIONS'],
+     # Enable regex support for wildcard domains
+     origin_regex=r"https://.*\.vercel\.app")
 
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), '../data')
@@ -419,7 +428,7 @@ def advice():
         print(f"Preferred Language Code: {preferred_language}")
         
         # Check for Gemini API key first, then OpenAI
-        gemini_api_key = os.getenv('GEMINI_API_KEY', 'AIzaSyDK2pBB_qgsVNOGJb1JHhVllS0rBiasA34')
+        gemini_api_key = os.getenv('GEMINI_API_KEY')
         openai_api_key = os.getenv('OPENAI_API_KEY')
         
         print(f"Gemini API Key available: {bool(gemini_api_key)}")
