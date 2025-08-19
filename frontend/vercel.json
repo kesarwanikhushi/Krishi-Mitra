@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://krishi-mitra-backend-dw8b.onrender.com"
+    "NEXT_PUBLIC_API_URL": "https://krishi-mitra-jwqy.onrender.com"
   },
   "headers": [
     {
