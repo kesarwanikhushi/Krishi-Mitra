@@ -84,24 +84,6 @@ npm run dev
 
 ---
 
-## Screenshots & GIFs
-
-### Home & Voice Chat
-![Home](docs/screenshots/home.png)
-![Voice Chat](docs/screenshots/voice.gif)
-
-### Crop Calendar & Confidence Meter
-![Calendar](docs/screenshots/calendar.png)
-![Confidence](docs/screenshots/confidence.gif)
-
-### Demo Mode & Offline
-![Demo Mode](docs/screenshots/demo.png)
-![Offline](docs/screenshots/offline.gif)
-
-> _Add your own screenshots/GIFs to `docs/screenshots/`_
-
----
-
 ## Deployment
 
 - **Frontend**: Vercel (see `frontend/vercel.json`)
