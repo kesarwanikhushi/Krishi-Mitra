@@ -1,0 +1,66 @@
+[
+  {
+    "district": "Kanpur",
+    "soilType": "Alluvial",
+    "ph": 6.8,
+    "nitrogen": "Medium",
+    "phosphorus": "High", 
+    "potassium": "Medium",
+    "organicCarbon": 0.65,
+    "recommendations": [
+      "Apply 120 kg N, 60 kg P2O5, 40 kg K2O per hectare for wheat",
+      "Use organic manure @ 10 tonnes per hectare",
+      "Maintain soil moisture for optimal nutrient uptake"
+    ],
+    "suitableCrops": ["Wheat", "Rice", "Sugarcane", "Cotton"],
+    "lastTested": "2025-07-15"
+  },
+  {
+    "district": "Lucknow",
+    "soilType": "Clay Loam",
+    "ph": 7.2,
+    "nitrogen": "Low",
+    "phosphorus": "Medium",
+    "potassium": "High",
+    "organicCarbon": 0.58,
+    "recommendations": [
+      "Apply additional nitrogen fertilizer",
+      "Use biofertilizers to improve nitrogen content",
+      "Apply phosphorus fertilizer @ 50 kg P2O5 per hectare"
+    ],
+    "suitableCrops": ["Rice", "Wheat", "Pulses", "Vegetables"],
+    "lastTested": "2025-07-20"
+  },
+  {
+    "district": "Agra",
+    "soilType": "Sandy Loam",
+    "ph": 8.1,
+    "nitrogen": "Low",
+    "phosphorus": "Low",
+    "potassium": "Medium",
+    "organicCarbon": 0.42,
+    "recommendations": [
+      "Apply gypsum to reduce soil alkalinity",
+      "Use organic matter to improve soil structure",
+      "Apply balanced NPK fertilizer"
+    ],
+    "suitableCrops": ["Cotton", "Millet", "Groundnut", "Maize"],
+    "lastTested": "2025-07-10"
+  },
+  {
+    "district": "Varanasi",
+    "soilType": "Black Soil",
+    "ph": 7.5,
+    "nitrogen": "High",
+    "phosphorus": "Medium",
+    "potassium": "High",
+    "organicCarbon": 0.78,
+    "recommendations": [
+      "Maintain current fertility levels",
+      "Apply phosphorus fertilizer @ 40 kg P2O5 per hectare",
+      "Continue organic farming practices"
+    ],
+    "suitableCrops": ["Cotton", "Sugarcane", "Soybean", "Wheat"],
+    "lastTested": "2025-07-25"
+  }
+]

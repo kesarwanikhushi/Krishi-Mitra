@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mic Button Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>🎤 Mic Button Test</h2>
+        
+        <div class="mt-4">
+            <h4>Expected Layout:</h4>
+            <div class="d-flex gap-2 mt-3">
+                <div class="position-relative flex-fill">
+                    <textarea 
+                        class="form-control border-0 shadow-sm"
+                        rows="1"
+                        placeholder="Type your question..."
+                        style="
+                            font-size: 1rem;
+                            border-radius: 12px;
+                            background: #f8f9fa;
+                            resize: none;
+                            padding-right: 50px;
+                        "
+                    ></textarea>
+                    
+                    <!-- This is how the mic button should look -->
+                    <button
+                        class="btn btn-primary position-absolute top-50 end-0 translate-middle-y me-2"
+                        style="
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            padding: 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            z-index: 100;
+                            border: 2px solid #007bff;
+                        "
+                        onclick="alert('Mic button clicked!')"
+                    >
+                        🎤
+                    </button>
+                </div>
+                
+                <button class="btn btn-success px-4" style="border-radius: 12px;">
+                    🚀
+                </button>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h4>Browser Speech Support Test:</h4>
+            <button class="btn btn-info" onclick="testSpeech()">Test Speech Recognition</button>
+            <div id="speechResult" class="mt-2"></div>
+        </div>
+    </div>
+
+    <script>
+        function testSpeech() {
+            const resultDiv = document.getElementById('speechResult');
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (SpeechRecognition) {
+                resultDiv.innerHTML = '<div class="alert alert-success">✅ Speech Recognition is supported!</div>';
+            } else {
+                resultDiv.innerHTML = '<div class="alert alert-danger">❌ Speech Recognition is NOT supported in this browser.</div>';
+            }
+        }
+        
+        // Test on page load
+        window.onload = testSpeech;
+    </script>
+</body>
+</html>

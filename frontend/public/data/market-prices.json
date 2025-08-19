@@ -1,0 +1,296 @@
+[
+  {
+    "crop": "Wheat",
+    "market": "Kanpur",
+    "date": "2025-08-18",
+    "price": 2150,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Kanpur", 
+    "date": "2025-08-17",
+    "price": 2140,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Kanpur",
+    "date": "2025-08-16", 
+    "price": 2160,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Kanpur",
+    "date": "2025-08-15",
+    "price": 2130,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Kanpur",
+    "date": "2025-08-14",
+    "price": 2120,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Kanpur",
+    "date": "2025-08-13",
+    "price": 2110,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Kanpur",
+    "date": "2025-08-12",
+    "price": 2125,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur",
+    "date": "2025-08-18",
+    "price": 2800,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur",
+    "date": "2025-08-17",
+    "price": 2750,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur",
+    "date": "2025-08-16",
+    "price": 2780,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur",
+    "date": "2025-08-15",
+    "price": 2760,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur",
+    "date": "2025-08-14",
+    "price": 2740,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur",
+    "date": "2025-08-13",
+    "price": 2720,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur",
+    "date": "2025-08-12",
+    "price": 2730,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-18",
+    "price": 2180,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-17",
+    "price": 2170,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-16",
+    "price": 2190,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-15",
+    "price": 2160,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-14",
+    "price": 2150,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-13",
+    "price": 2140,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-12",
+    "price": 2155,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-18",
+    "price": 2850,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-17",
+    "price": 2820,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-16",
+    "price": 2840,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-15",
+    "price": 2810,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-14",
+    "price": 2800,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-13",
+    "price": 2790,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-12",
+    "price": 2805,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-18",
+    "price": 5200,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-17",
+    "price": 5180,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-16",
+    "price": 5220,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-15",
+    "price": 5190,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-14",
+    "price": 5170,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-13",
+    "price": 5160,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-12",
+    "price": 5175,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-18",
+    "price": 350,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-17",
+    "price": 348,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-16",
+    "price": 352,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-15",
+    "price": 349,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-14",
+    "price": 347,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-13",
+    "price": 346,
+    "unit": "per quintal"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-12",
+    "price": 348,
+    "unit": "per quintal"
+  }
+]

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 20px; margin: 10px 0; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #result { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    <p>Backend server should be running on: <strong>http://localhost:5001</strong></p>
+    
+    <button onclick="testHealth()">Test Health Endpoint</button>
+    <button onclick="testAdvice()">Test Advice Endpoint</button>
+    <button onclick="testDirect()">Test Direct Backend</button>
+    
+    <div id="result">Click a button to test the backend connection...</div>
+    
+    <script>
+        async function testHealth() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing health endpoint...';
+            resultDiv.className = '';
+            
+            try {
+                const response = await fetch('/backend/health');
+                const data = await response.text();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<strong>✓ Health Test Success!</strong><br>Status: ${response.status}<br>Response: ${data}`;
+                    resultDiv.className = 'success';
+                } else {
+                    resultDiv.innerHTML = `<strong>⚠ Health Test Failed</strong><br>Status: ${response.status}<br>Response: ${data}`;
+                    resultDiv.className = 'error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>❌ Health Test Error</strong><br>Error: ${error.message}`;
+                resultDiv.className = 'error';
+            }
+        }
+        
+        async function testAdvice() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing advice endpoint...';
+            resultDiv.className = '';
+            
+            try {
+                const response = await fetch('/backend/advice', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        text: 'How to grow wheat?', 
+                        language: 'en', 
+                        district: 'Kanpur' 
+                    })
+                });
+                const data = await response.text();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<strong>✓ Advice Test Success!</strong><br>Status: ${response.status}<br>Response: ${data}`;
+                    resultDiv.className = 'success';
+                } else {
+                    resultDiv.innerHTML = `<strong>⚠ Advice Test Failed</strong><br>Status: ${response.status}<br>Response: ${data}`;
+                    resultDiv.className = 'error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>❌ Advice Test Error</strong><br>Error: ${error.message}`;
+                resultDiv.className = 'error';
+            }
+        }
+        
+        async function testDirect() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing direct backend connection...';
+            resultDiv.className = '';
+            
+            try {
+                const response = await fetch('http://localhost:5001/health');
+                const data = await response.text();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<strong>✓ Direct Test Success!</strong><br>Status: ${response.status}<br>Response: ${data}`;
+                    resultDiv.className = 'success';
+                } else {
+                    resultDiv.innerHTML = `<strong>⚠ Direct Test Failed</strong><br>Status: ${response.status}<br>Response: ${data}`;
+                    resultDiv.className = 'error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>❌ Direct Test Error</strong><br>Error: ${error.message}<br><small>Note: This might fail due to CORS policy</small>`;
+                resultDiv.className = 'error';
+            }
+        }
+    </script>
+</body>
+</html>

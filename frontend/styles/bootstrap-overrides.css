@@ -1,0 +1,25 @@
+:root {
+  --km-green: #388e3c;
+  --km-yellow: #ffb300;
+  --km-blue: #1976d2;
+  --km-purple: #8e24aa;
+  --km-brown: #6d4c41;
+  --km-bg: #f5f5f5;
+  --km-text: #111;
+  --km-card-radius: 16px;
+  --km-spacing-xs: 0.5rem;
+  --km-spacing-sm: 1rem;
+  --km-spacing-md: 1.5rem;
+  --km-spacing-lg: 2rem;
+}
+
+.bg-km-green { background: var(--km-green) !important; color: #fff !important; }
+.bg-km-yellow { background: var(--km-yellow) !important; color: #222 !important; }
+.bg-km-blue { background: var(--km-blue) !important; color: #fff !important; }
+.bg-km-purple { background: var(--km-purple) !important; color: #fff !important; }
+.bg-km-brown { background: var(--km-brown) !important; color: #fff !important; }
+.text-km-green { color: var(--km-green) !important; }
+.rounded-km { border-radius: var(--km-card-radius) !important; }
+.p-km { padding: var(--km-spacing-sm) !important; }
+.px-km { padding-left: var(--km-spacing-sm) !important; padding-right: var(--km-spacing-sm) !important; }
+.py-km { padding-top: var(--km-spacing-sm) !important; padding-bottom: var(--km-spacing-sm) !important; }

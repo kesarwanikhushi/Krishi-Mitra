@@ -1,0 +1,74 @@
+[
+  {
+    "crop": "Wheat",
+    "market": "Kanpur",
+    "date": "2025-08-18",
+    "price": 2150,
+    "unit": "per quintal",
+    "change": "+15",
+    "trend": "rising"
+  },
+  {
+    "crop": "Rice",
+    "market": "Kanpur", 
+    "date": "2025-08-18",
+    "price": 2800,
+    "unit": "per quintal",
+    "change": "+25",
+    "trend": "rising"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Kanpur",
+    "date": "2025-08-18", 
+    "price": 5200,
+    "unit": "per quintal",
+    "change": "-10",
+    "trend": "falling"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Kanpur",
+    "date": "2025-08-18",
+    "price": 350,
+    "unit": "per quintal", 
+    "change": "+5",
+    "trend": "stable"
+  },
+  {
+    "crop": "Wheat",
+    "market": "Lucknow",
+    "date": "2025-08-18",
+    "price": 2180,
+    "unit": "per quintal",
+    "change": "+20",
+    "trend": "rising"
+  },
+  {
+    "crop": "Rice",
+    "market": "Lucknow",
+    "date": "2025-08-18",
+    "price": 2850,
+    "unit": "per quintal",
+    "change": "+30",
+    "trend": "rising"
+  },
+  {
+    "crop": "Cotton",
+    "market": "Lucknow",
+    "date": "2025-08-18",
+    "price": 5300,
+    "unit": "per quintal",
+    "change": "+15",
+    "trend": "rising"
+  },
+  {
+    "crop": "Sugarcane",
+    "market": "Lucknow",
+    "date": "2025-08-18",
+    "price": 360,
+    "unit": "per quintal",
+    "change": "+8",
+    "trend": "rising"
+  }
+]

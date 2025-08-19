@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "title": "Wheat Sowing Advisory",
+    "crop": "Wheat",
+    "district": "Kanpur",
+    "date": "2025-08-18",
+    "content": "Begin preparation for wheat sowing. Ensure proper field preparation and seed treatment. Recommended varieties: HD-2967, HD-3086. Sowing should begin in November.",
+    "category": "sowing",
+    "priority": "high"
+  },
+  {
+    "id": "2", 
+    "title": "Rice Harvest Advisory",
+    "crop": "Rice",
+    "district": "Kanpur",
+    "date": "2025-08-18",
+    "content": "Rice crops are ready for harvest. Monitor weather conditions and harvest before any heavy rainfall. Ensure proper drying and storage.",
+    "category": "harvest",
+    "priority": "urgent"
+  },
+  {
+    "id": "3",
+    "title": "Pest Management for Cotton",
+    "crop": "Cotton",
+    "district": "Lucknow",
+    "date": "2025-08-17",
+    "content": "Monitor cotton crops for bollworm infestation. Apply recommended pesticides if pest count exceeds threshold. Use integrated pest management practices.",
+    "category": "pest_management",
+    "priority": "medium"
+  },
+  {
+    "id": "4",
+    "title": "Sugarcane Irrigation Advisory",
+    "crop": "Sugarcane",
+    "district": "Kanpur",
+    "date": "2025-08-16",
+    "content": "Maintain regular irrigation for sugarcane crop. Apply 4-5 cm water every 10-12 days. Avoid waterlogging in fields.",
+    "category": "irrigation",
+    "priority": "medium"
+  },
+  {
+    "id": "5",
+    "title": "Soil Health Management",
+    "crop": "All",
+    "district": "All",
+    "date": "2025-08-15",
+    "content": "Test soil pH and nutrient levels. Apply organic manure and balanced fertilizers based on soil test results. Maintain soil health for better crop yield.",
+    "category": "soil_management",
+    "priority": "low"
+  }
+]

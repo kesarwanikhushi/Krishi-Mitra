@@ -1,0 +1,278 @@
+[
+  {
+    "crop": "Wheat",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Rice",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "June", "phase": "sow" },
+      { "month": "July", "phase": "grow" },
+      { "month": "August", "phase": "grow" },
+      { "month": "September", "phase": "grow" },
+      { "month": "October", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Maize",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "April", "phase": "sow" },
+      { "month": "May", "phase": "grow" },
+      { "month": "June", "phase": "grow" },
+      { "month": "July", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Sugarcane",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "February", "phase": "sow" },
+      { "month": "March", "phase": "grow" },
+      { "month": "April", "phase": "grow" },
+      { "month": "May", "phase": "grow" },
+      { "month": "June", "phase": "grow" },
+      { "month": "July", "phase": "grow" },
+      { "month": "August", "phase": "grow" },
+      { "month": "September", "phase": "grow" },
+      { "month": "October", "phase": "grow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "harvest" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Cotton",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "May", "phase": "sow" },
+      { "month": "June", "phase": "grow" },
+      { "month": "July", "phase": "grow" },
+      { "month": "August", "phase": "grow" },
+      { "month": "September", "phase": "grow" },
+      { "month": "October", "phase": "harvest" },
+      { "month": "November", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Mustard",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Potato",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Tomato",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "September", "phase": "sow" },
+      { "month": "October", "phase": "grow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "harvest" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Onion",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Barley",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Gram",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Pea",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Wheat",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Rice",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "June", "phase": "sow" },
+      { "month": "July", "phase": "grow" },
+      { "month": "August", "phase": "grow" },
+      { "month": "September", "phase": "grow" },
+      { "month": "October", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Maize",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "April", "phase": "sow" },
+      { "month": "May", "phase": "grow" },
+      { "month": "June", "phase": "grow" },
+      { "month": "July", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Sugarcane",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "February", "phase": "sow" },
+      { "month": "March", "phase": "grow" },
+      { "month": "April", "phase": "grow" },
+      { "month": "May", "phase": "grow" },
+      { "month": "June", "phase": "grow" },
+      { "month": "July", "phase": "grow" },
+      { "month": "August", "phase": "grow" },
+      { "month": "September", "phase": "grow" },
+      { "month": "October", "phase": "grow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "harvest" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Cotton",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "May", "phase": "sow" },
+      { "month": "June", "phase": "grow" },
+      { "month": "July", "phase": "grow" },
+      { "month": "August", "phase": "grow" },
+      { "month": "September", "phase": "grow" },
+      { "month": "October", "phase": "harvest" },
+      { "month": "November", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Mustard",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Potato",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Tomato",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "September", "phase": "sow" },
+      { "month": "October", "phase": "grow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "harvest" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Onion",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Barley",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Gram",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Pea",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "October", "phase": "sow" },
+      { "month": "November", "phase": "grow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "harvest" }
+    ]
+  }
+]

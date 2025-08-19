@@ -1,0 +1,37 @@
+{
+  "info": {
+    "name": "Krishi Mitra Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": "http://localhost:5000/health" }
+    },
+    {
+      "name": "Weather",
+      "request": { "method": "GET", "url": { "raw": "http://localhost:5000/weather?district=Kanpur", "host": ["localhost"], "port": "5000", "path": ["weather"], "query": [{"key":"district","value":"Kanpur"}] } }
+    },
+    {
+      "name": "Market",
+      "request": { "method": "GET", "url": { "raw": "http://localhost:5000/market?crop=Wheat&market=Kanpur", "host": ["localhost"], "port": "5000", "path": ["market"], "query": [{"key":"crop","value":"Wheat"},{"key":"market","value":"Kanpur"}] } }
+    },
+    {
+      "name": "Calendar",
+      "request": { "method": "GET", "url": { "raw": "http://localhost:5000/calendar?district=Kanpur", "host": ["localhost"], "port": "5000", "path": ["calendar"], "query": [{"key":"district","value":"Kanpur"}] } }
+    },
+    {
+      "name": "Advisories",
+      "request": { "method": "GET", "url": { "raw": "http://localhost:5000/advisories?district=Kanpur&crop=Wheat", "host": ["localhost"], "port": "5000", "path": ["advisories"], "query": [{"key":"district","value":"Kanpur"},{"key":"crop","value":"Wheat"}] } }
+    },
+    {
+      "name": "Advice",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode": "raw", "raw": "{\n  \"text\": \"Sample advice\",\n  \"language\": \"en\",\n  \"district\": \"Kanpur\"\n}" },
+        "url": { "raw": "http://localhost:5000/advice", "host": ["localhost"], "port": "5000", "path": ["advice"] }
+      }
+    }
+  ]
+}

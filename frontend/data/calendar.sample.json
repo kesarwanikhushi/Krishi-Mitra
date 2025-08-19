@@ -1,0 +1,35 @@
+[
+  {
+    "crop": "Wheat",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Rice",
+    "district": "Kanpur",
+    "phases": [
+      { "month": "June", "phase": "sow" },
+      { "month": "July", "phase": "grow" },
+      { "month": "August", "phase": "grow" },
+      { "month": "September", "phase": "grow" },
+      { "month": "October", "phase": "harvest" }
+    ]
+  },
+  {
+    "crop": "Wheat",
+    "district": "Lucknow",
+    "phases": [
+      { "month": "November", "phase": "sow" },
+      { "month": "December", "phase": "grow" },
+      { "month": "January", "phase": "grow" },
+      { "month": "February", "phase": "grow" },
+      { "month": "March", "phase": "harvest" }
+    ]
+  }
+]
