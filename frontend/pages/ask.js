@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ConfidenceBadge from '../components/ConfidenceBadge';
 import FormattedMessage from '../components/FormattedMessage';
 
-export default function Ask() {
+export default function Ask({ language = 'en' }) {
   const { t, ready } = useTranslation();
   const [question, setQuestion] = useState('');
   const [currentSessionId, setCurrentSessionId] = useState(null);
@@ -17,6 +17,7 @@ export default function Ask() {
   const [detectedLanguage, setDetectedLanguage] = useState('en-US');
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentSpeakingMessageId, setCurrentSpeakingMessageId] = useState(null);
+  const [autoSpeech, setAutoSpeech] = useState(false); // Auto-speech for accessibility
   const recognitionRef = useRef(null);
   const synthRef = useRef(null);
 
@@ -24,6 +25,23 @@ export default function Ask() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Load auto-speech preference from localStorage
+  useEffect(() => {
+    if (mounted) {
+      const savedAutoSpeech = localStorage.getItem('krishimitra-auto-speech');
+      if (savedAutoSpeech !== null) {
+        setAutoSpeech(JSON.parse(savedAutoSpeech));
+      }
+    }
+  }, [mounted]);
+
+  // Save auto-speech preference to localStorage
+  useEffect(() => {
+    if (mounted) {
+      localStorage.setItem('krishimitra-auto-speech', JSON.stringify(autoSpeech));
+    }
+  }, [autoSpeech, mounted]);
 
   // Load all chat sessions from localStorage on component mount
   useEffect(() => {
@@ -111,9 +129,23 @@ export default function Ask() {
         recognitionRef.current = recognition;
       }
 
-      // Initialize speech synthesis
+      // Initialize speech synthesis with enhanced multilingual support
       if (SpeechSynthesis) {
         synthRef.current = SpeechSynthesis;
+        
+        // Load voices for better language support
+        const loadVoices = () => {
+          const voices = synthRef.current.getVoices();
+          console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
+          
+          // Log available languages for debugging
+          const availableLanguages = [...new Set(voices.map(v => v.lang))].sort();
+          console.log('Available speech languages:', availableLanguages);
+        };
+        
+        // Load voices immediately and on voiceschanged event
+        loadVoices();
+        synthRef.current.onvoiceschanged = loadVoices;
       }
     }
   }, []);
@@ -161,6 +193,48 @@ export default function Ask() {
     return langMap[langCode] || 'english';
   };
 
+  // Function to map frontend language codes to backend language names
+  const getBackendLanguageFromUILanguage = (uiLang) => {
+    const langMap = {
+      'hi': 'hindi',
+      'bn': 'bengali',
+      'gu': 'gujarati',
+      'pa': 'punjabi',
+      'te': 'telugu',
+      'ta': 'tamil',
+      'mr': 'marathi',
+      'kn': 'kannada',
+      'ml': 'malayalam',
+      'or': 'odia',
+      'as': 'assamese',
+      'ur': 'urdu',
+      'en': 'english',
+      'hinglish': 'english' // Fallback to English for Hinglish
+    };
+    return langMap[uiLang] || 'english';
+  };
+
+  // Function to get language code from UI language for speech/detection
+  const getLanguageCodeFromUILanguage = (uiLang) => {
+    const langMap = {
+      'hi': 'hi-IN',
+      'bn': 'bn-IN',
+      'gu': 'gu-IN',
+      'pa': 'pa-IN',
+      'te': 'te-IN',
+      'ta': 'ta-IN',
+      'mr': 'mr-IN',
+      'kn': 'kn-IN',
+      'ml': 'ml-IN',
+      'or': 'or-IN',
+      'as': 'as-IN',
+      'ur': 'ur-IN',
+      'en': 'en-US',
+      'hinglish': 'en-US'
+    };
+    return langMap[uiLang] || 'en-US';
+  };
+
   // Function to get language display name
   const getLanguageDisplayName = (langCode) => {
     const displayMap = {
@@ -168,8 +242,31 @@ export default function Ask() {
       'bn-IN': 'Bengali',
       'gu-IN': 'Gujarati',
       'pa-IN': 'Punjabi',
+      'te-IN': 'Telugu',
+      'ta-IN': 'Tamil',
+      'mr-IN': 'Marathi',
+      'kn-IN': 'Kannada',
+      'ml-IN': 'Malayalam',
+      'or-IN': 'Odia',
+      'as-IN': 'Assamese',
+      'ur-IN': 'Urdu',
       'en-US': 'English',
-      'ar-SA': 'Arabic'
+      'ar-SA': 'Arabic',
+      // UI language codes
+      'hi': 'Hindi',
+      'bn': 'Bengali',
+      'gu': 'Gujarati',
+      'pa': 'Punjabi',
+      'te': 'Telugu',
+      'ta': 'Tamil',
+      'mr': 'Marathi',
+      'kn': 'Kannada',
+      'ml': 'Malayalam',
+      'or': 'Odia',
+      'as': 'Assamese',
+      'ur': 'Urdu',
+      'en': 'English',
+      'hinglish': 'Hinglish'
     };
     return displayMap[langCode] || 'English';
   };
@@ -181,13 +278,18 @@ export default function Ask() {
     // Stop any ongoing speech
     synthRef.current.cancel();
 
-    // Clean text for speech (remove markdown formatting)
+    // Enhanced text cleaning for multilingual content
     const cleanText = text
       .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold formatting
       .replace(/\* /g, '') // Remove bullet points
       .replace(/\n+/g, '. ') // Replace line breaks with pauses
       .replace(/[#*]/g, '') // Remove other markdown characters
+      .replace(/---/g, '') // Remove dividers
+      .replace(/📋|💡|🌾|⚠️|✅|🛠️|⏰|🎯/g, '') // Remove emojis that might cause issues
+      .replace(/\s+/g, ' ') // Normalize whitespace
       .trim();
+
+    if (!cleanText) return;
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     
@@ -195,30 +297,83 @@ export default function Ask() {
     const speechLang = getSpeechLanguage(language);
     utterance.lang = speechLang;
     
-    // Set voice properties
-    utterance.rate = 0.9; // Slightly slower for better comprehension
+    // Enhanced voice properties for better multilingual support
+    utterance.rate = 0.8; // Slower for better comprehension across languages
     utterance.pitch = 1;
     utterance.volume = 1;
+
+    // Try to find the best voice for the language
+    const voices = synthRef.current.getVoices();
+    const preferredVoice = findBestVoice(voices, speechLang);
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+      console.log(`Using voice: ${preferredVoice.name} for language: ${speechLang}`);
+    }
 
     // Set up event handlers
     utterance.onstart = () => {
       setIsSpeaking(true);
       setCurrentSpeakingMessageId(messageId);
+      console.log(`Started speaking in ${speechLang}: ${cleanText.substring(0, 50)}...`);
     };
 
     utterance.onend = () => {
       setIsSpeaking(false);
       setCurrentSpeakingMessageId(null);
+      console.log('Speech ended');
     };
 
     utterance.onerror = (event) => {
-      console.error('Speech synthesis error:', event.error);
+      console.error('Speech synthesis error:', event.error, 'for language:', speechLang);
       setIsSpeaking(false);
       setCurrentSpeakingMessageId(null);
+      
+      // Try fallback to English if the language fails
+      if (speechLang !== 'en-US') {
+        console.log('Retrying with English voice...');
+        setTimeout(() => {
+          const fallbackUtterance = new SpeechSynthesisUtterance(cleanText);
+          fallbackUtterance.lang = 'en-US';
+          fallbackUtterance.rate = 0.8;
+          fallbackUtterance.onstart = () => {
+            setIsSpeaking(true);
+            setCurrentSpeakingMessageId(messageId);
+          };
+          fallbackUtterance.onend = () => {
+            setIsSpeaking(false);
+            setCurrentSpeakingMessageId(null);
+          };
+          synthRef.current.speak(fallbackUtterance);
+        }, 100);
+      }
     };
 
     // Speak the text
     synthRef.current.speak(utterance);
+  };
+
+  // Function to find the best voice for a given language
+  const findBestVoice = (voices, languageCode) => {
+    if (!voices || voices.length === 0) return null;
+    
+    // First try to find exact language match
+    let bestVoice = voices.find(voice => voice.lang === languageCode);
+    
+    // If no exact match, try language family (e.g., 'hi' for 'hi-IN')
+    if (!bestVoice) {
+      const languageFamily = languageCode.split('-')[0];
+      bestVoice = voices.find(voice => voice.lang.startsWith(languageFamily));
+    }
+    
+    // Prefer native/local voices over remote ones
+    if (bestVoice && voices.filter(v => v.lang === bestVoice.lang).length > 1) {
+      const nativeVoice = voices.find(v => 
+        v.lang === bestVoice.lang && v.localService === true
+      );
+      if (nativeVoice) bestVoice = nativeVoice;
+    }
+    
+    return bestVoice;
   };
 
   // Function to stop speech
@@ -237,14 +392,31 @@ export default function Ask() {
       'bn-IN': 'bn-IN',
       'gu-IN': 'gu-IN',
       'pa-IN': 'pa-IN',
+      'te-IN': 'te-IN',
+      'ta-IN': 'ta-IN',
+      'mr-IN': 'mr-IN',
+      'kn-IN': 'kn-IN',
+      'ml-IN': 'ml-IN',
+      'or-IN': 'or-IN',
+      'as-IN': 'as-IN',
+      'ur-IN': 'ur-IN',
       'en-US': 'en-US',
       'ar-SA': 'ar-SA',
-      'english': 'en-US',
-      'hindi': 'hi-IN',
-      'bengali': 'bn-IN',
-      'gujarati': 'gu-IN',
-      'punjabi': 'pa-IN',
-      'arabic': 'ar-SA'
+      // Additional mappings for UI language codes
+      'hi': 'hi-IN',
+      'bn': 'bn-IN',
+      'gu': 'gu-IN',
+      'pa': 'pa-IN',
+      'te': 'te-IN',
+      'ta': 'ta-IN',
+      'mr': 'mr-IN',
+      'kn': 'kn-IN',
+      'ml': 'ml-IN',
+      'or': 'or-IN',
+      'as': 'as-IN',
+      'ur': 'ur-IN',
+      'en': 'en-US',
+      'hinglish': 'en-US'
     };
     return speechLangMap[langCode] || 'en-US';
   };
@@ -256,17 +428,17 @@ export default function Ask() {
     if (isListening) {
       recognitionRef.current.stop();
     } else {
-      // Set up recognition for multi-language support
-      const supportedLanguages = ['hi-IN', 'en-US', 'bn-IN', 'gu-IN', 'pa-IN'];
+      // Set up recognition for the current UI language
+      const currentLanguageCode = getLanguageCodeFromUILanguage(language);
       
-      // Try to use the previously detected language, fallback to English
-      recognitionRef.current.lang = detectedLanguage || 'en-US';
+      // Set the recognition language to the current UI language
+      recognitionRef.current.lang = currentLanguageCode;
       
       try {
         recognitionRef.current.start();
       } catch (error) {
         console.error('Speech recognition start error:', error);
-        // Fallback to English if the detected language fails
+        // Fallback to English if the current language fails
         recognitionRef.current.lang = 'en-US';
         recognitionRef.current.start();
       }
@@ -456,11 +628,14 @@ export default function Ask() {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
       console.log('🔗 API URL:', apiUrl);
       console.log('📤 Sending question:', currentQuestion);
-      console.log('🌐 Detected language:', detectedLanguage);
+      console.log('🌐 Current UI language:', language);
       
-      // Detect language from the question if not already detected
-      const questionLanguage = detectedLanguage || detectLanguageFromText(currentQuestion);
-      const apiLanguage = getLanguageForAPI(questionLanguage);
+      // Use the current UI language for the response instead of trying to detect from question
+      const backendLanguage = getBackendLanguageFromUILanguage(language);
+      const languageCode = getLanguageCodeFromUILanguage(language);
+      
+      console.log('🌐 Backend language:', backendLanguage);
+      console.log('🌐 Language code:', languageCode);
       
       const response = await fetch(`${apiUrl}/advice`, {
         method: 'POST',
@@ -469,8 +644,8 @@ export default function Ask() {
         },
         body: JSON.stringify({ 
           question: currentQuestion,
-          language: apiLanguage,
-          preferredLanguage: questionLanguage
+          language: backendLanguage,
+          preferredLanguage: languageCode
         }),
       });
 
@@ -514,6 +689,13 @@ export default function Ask() {
           [sessionId]: updatedSession
         };
       });
+
+      // Auto-speech: Automatically read the response if enabled
+      if (autoSpeech && botMessage.content) {
+        setTimeout(() => {
+          speakText(botMessage.content, botMessage.id, language);
+        }, 500); // Small delay to ensure the message is rendered
+      }
     } catch (error) {
       console.error('Error:', error);
       const errorMessage = {
@@ -712,6 +894,52 @@ export default function Ask() {
               )}
             </div>
           </div>
+          
+          {/* Auto-Speech Toggle and Controls */}
+          <div className="d-flex align-items-center gap-2">
+            {/* Stop Speaking Button - Only show when speaking */}
+            {isSpeaking && (
+              <button
+                className="btn btn-outline-danger btn-sm"
+                onClick={stopSpeaking}
+                title="Stop speaking"
+                style={{ borderRadius: '8px' }}
+              >
+                ⏹️ Stop
+              </button>
+            )}
+            
+            {/* Auto-Speech Toggle */}
+            <div className="form-check form-switch d-flex align-items-center gap-2">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="autoSpeechToggle"
+                checked={autoSpeech}
+                onChange={(e) => setAutoSpeech(e.target.checked)}
+                style={{ cursor: 'pointer' }}
+              />
+              <label 
+                className="form-check-label text-muted" 
+                htmlFor="autoSpeechToggle"
+                style={{ cursor: 'pointer', fontSize: '0.9rem' }}
+                title={`Automatically read AI responses aloud in ${getLanguageDisplayName(language)} - Perfect for farmers who prefer listening`}
+              >
+                🔊 Auto-Read ({getLanguageDisplayName(language)})
+              </label>
+            </div>
+            
+            {/* Speech Status Indicator */}
+            {autoSpeech && (
+              <span 
+                className="badge bg-success"
+                style={{ fontSize: '0.7rem' }}
+                title="Auto-speech is enabled for accessibility"
+              >
+                🎧 Voice Assistant ON
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Chat Area */}
@@ -765,39 +993,54 @@ export default function Ask() {
                       
                       {/* Speaker button for bot messages only */}
                       {message.type !== 'user' && message.content && synthRef.current && (
-                        <button
-                          type="button"
-                          className={`btn btn-sm ${
-                            currentSpeakingMessageId === message.id 
-                              ? 'btn-primary' 
-                              : 'btn-outline-secondary'
-                          }`}
-                          style={{
-                            width: '32px',
-                            height: '32px',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '12px',
-                            marginLeft: '10px',
-                            transition: 'all 0.2s ease'
-                          }}
-                          onClick={() => {
-                            if (currentSpeakingMessageId === message.id) {
-                              stopSpeaking();
-                            } else {
-                              speakText(message.content, message.id, detectedLanguage);
+                        <div className="d-flex align-items-center gap-2">
+                          {/* Language indicator */}
+                          <span 
+                            className="badge bg-light text-dark"
+                            style={{ fontSize: '0.65rem' }}
+                            title={`Response in ${getLanguageDisplayName(language)}`}
+                          >
+                            {getLanguageDisplayName(language).substring(0, 3)}
+                          </span>
+                          
+                          <button
+                            type="button"
+                            className={`btn btn-sm ${
+                              currentSpeakingMessageId === message.id 
+                                ? 'btn-primary' 
+                                : 'btn-outline-secondary'
+                            }`}
+                            style={{
+                              width: '36px',
+                              height: '32px',
+                              borderRadius: '8px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '14px',
+                              transition: 'all 0.2s ease',
+                              position: 'relative'
+                            }}
+                            onClick={() => {
+                              if (currentSpeakingMessageId === message.id) {
+                                stopSpeaking();
+                              } else {
+                                speakText(message.content, message.id, language);
+                              }
+                            }}
+                            title={
+                              currentSpeakingMessageId === message.id 
+                                ? `Stop speaking in ${getLanguageDisplayName(language)}` 
+                                : `Read aloud in ${getLanguageDisplayName(language)}`
                             }
-                          }}
-                          title={
-                            currentSpeakingMessageId === message.id 
-                              ? 'Stop speaking' 
-                              : 'Read aloud'
-                          }
-                        >
-                          {currentSpeakingMessageId === message.id ? '⏹️' : '🔊'}
-                        </button>
+                          >
+                            {currentSpeakingMessageId === message.id ? (
+                              <span style={{ animation: 'pulse 1s infinite' }}>⏹️</span>
+                            ) : (
+                              '🔊'
+                            )}
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -813,6 +1056,21 @@ export default function Ask() {
               <p className="mb-3 text-muted" style={{ fontSize: '1.1rem' }}>
                 {t('askPlaceholderSubtitle')}
               </p>
+              
+              {/* Speech Feature Info */}
+              <div className="alert alert-info d-flex align-items-center mb-4" style={{ borderRadius: '12px', backgroundColor: '#e3f2fd', border: 'none' }}>
+                <div className="flex-grow-1">
+                  <div className="d-flex align-items-center gap-2 mb-1">
+                    <span style={{ fontSize: '1.2rem' }}>🎧</span>
+                    <strong style={{ color: '#1976d2' }}>Voice Assistant Feature</strong>
+                  </div>
+                  <small className="text-muted">
+                    AI responses will be spoken in <strong>{getLanguageDisplayName(language)}</strong>. 
+                    Click the 🔊 button on any response or enable "Auto-Read" above for automatic speech.
+                    Perfect for farmers who prefer listening!
+                  </small>
+                </div>
+              </div>
               
               <div className="row g-2 mb-3">
                 {[
