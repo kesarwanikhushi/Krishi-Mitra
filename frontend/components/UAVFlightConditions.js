@@ -25,7 +25,7 @@ export default function UAVFlightConditions({ userLocation, show = false }) {
     try {
       const backendUrl = process.env.NODE_ENV === 'production' 
         ? 'https://your-backend-url.com' 
-        : 'http://localhost:5000';
+        : 'https://krishi-mitra-jwqy.onrender.com';
       
       // Build query parameters
       const params = new URLSearchParams({
