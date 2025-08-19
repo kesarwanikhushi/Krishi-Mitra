@@ -265,30 +265,13 @@ def rate_limiter(max_per_minute=30):
 app = Flask(__name__)
 
 # Configure CORS for both development and production
-cors_origins = [
-    "http://localhost:3000", 
-    "http://localhost:3001",
-    "http://localhost:3002",
-    "https://krishi-mitra-frontend-dun.vercel.app",
-    "https://krishi-mitra-frontend.vercel.app",
-    "https://krishi-mitra-frontend-git-main-kesarwanikhushis-projects.vercel.app",
-    # Add patterns for common Vercel deployment URLs
-    "https://krishi-mitra-*.vercel.app",
-    "https://krishi-mitra-frontend-*.vercel.app"
-]
+CORS(app, origins=["https://krishi-mitra-eight-delta.vercel.app"])
 
 # Add environment variable for production CORS origins
-if os.getenv('CORS_ORIGINS'):
-    cors_origins.extend(os.getenv('CORS_ORIGINS').split(','))
 
 # Add wildcard support for Vercel domains
-cors_origins.append("https://*.vercel.app")
 
-CORS(app, origins=cors_origins, supports_credentials=True, 
-     allow_headers=['Content-Type', 'Authorization'], 
-     methods=['GET', 'POST', 'OPTIONS'],
      # Enable regex support for wildcard domains
-     origin_regex=r"https://.*\.vercel\.app")
 
 
 # Handle data directory path for both local development and Docker deployment
@@ -336,7 +319,6 @@ def health():
     return jsonify({
         'status': 'ok',
         'timestamp': time(),
-        'cors_origins': cors_origins,
         'environment': os.getenv('FLASK_ENV', 'development')
     })
 
