@@ -64,7 +64,7 @@ const getApiUrl = () => {
   }
   // For production, determine API URL based on deployment
   // This should match your actual deployed backend URL
-  return process.env.NEXT_PUBLIC_API_URL || 'https://krishi-mitra-backend.onrender.com';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://your-actual-render-url-here.onrender.com';
 };
 
 workbox.routing.registerRoute(

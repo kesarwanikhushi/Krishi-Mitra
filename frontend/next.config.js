@@ -12,7 +12,9 @@ module.exports = withPWA({
     return [
       {
         source: '/backend/:path*',
-        destination: 'http://localhost:5001/:path*',
+        destination: process.env.NODE_ENV === 'production' 
+          ? `${process.env.NEXT_PUBLIC_API_URL}/:path*`
+          : 'http://localhost:5001/:path*',
       },
     ];
   },

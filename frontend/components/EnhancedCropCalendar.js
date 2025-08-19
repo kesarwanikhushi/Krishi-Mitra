@@ -29,9 +29,10 @@ export default function EnhancedCropCalendar({ data, selectedCrop, userLocation 
     setLoading(true);
     try {
       // Backend URL - adjust based on your setup
-      const backendUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://your-backend-url.com' 
-        : 'http://localhost:5000';
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 
+        (process.env.NODE_ENV === 'production' 
+          ? 'https://your-actual-render-url-here.onrender.com' 
+          : 'http://localhost:5001');
       
       // Fetch current weather
       const weatherResponse = await fetch(`${backendUrl}/api/data/weather?lat=${lat}&lon=${lon}`);
