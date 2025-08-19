@@ -291,7 +291,15 @@ CORS(app, origins=cors_origins, supports_credentials=True,
      origin_regex=r"https://.*\.vercel\.app")
 
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), '../data')
+# Handle data directory path for both local development and Docker deployment
+if os.path.exists(os.path.join(os.path.dirname(__file__), 'data')):
+    # Docker/Production: data is in ./data
+    DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+else:
+    # Local development: data is in ../data
+    DATA_DIR = os.path.join(os.path.dirname(__file__), '../data')
+
+print(f"Using data directory: {DATA_DIR}")
 DATA = {}
 DATA_MTIME = {}
 DATA_ETAG = {}
@@ -433,6 +441,9 @@ def advice():
         
         print(f"Gemini API Key available: {bool(gemini_api_key)}")
         print(f"OpenAI API Key available: {bool(openai_api_key)}")
+        
+        if not gemini_api_key and not openai_api_key:
+            return error_response('api_key_missing', 'Neither GEMINI_API_KEY nor OPENAI_API_KEY is configured'), 500
         
         if gemini_api_key:
             try:
