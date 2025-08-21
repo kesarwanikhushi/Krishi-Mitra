@@ -4,8 +4,15 @@ export default function PWAFeatures() {
   const [online, setOnline] = useState(typeof window !== 'undefined' ? window.navigator.onLine : true);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [installable, setInstallable] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
+    // Check if app is already installed/running in standalone mode
+    if (typeof window !== 'undefined') {
+      const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      setIsStandalone(standalone);
+    }
+
     const goOnline = () => setOnline(true);
     const goOffline = () => setOnline(false);
     window.addEventListener('online', goOnline);
@@ -28,6 +35,7 @@ export default function PWAFeatures() {
       // Hide the install promotion
       setInstallable(false);
       setDeferredPrompt(null);
+      setIsStandalone(true);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -54,9 +62,26 @@ export default function PWAFeatures() {
       return;
     }
 
+    // Check browser compatibility and provide specific guidance
+    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const isEdge = /Edg/.test(navigator.userAgent);
+    const isFirefox = /Firefox/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    
     if (!deferredPrompt) {
-      // If no install prompt is available, provide helpful feedback
-      alert('Install is not currently available. Please ensure you are using a supported browser (Chrome, Edge, Firefox) and accessing via HTTPS.');
+      let message = 'Install option not available right now. ';
+      
+      if (isSafari) {
+        message += 'On Safari, tap the Share button and select "Add to Home Screen".';
+      } else if (isChrome || isEdge) {
+        message += 'Try refreshing the page, or look for the install icon in your browser\'s address bar.';
+      } else if (isFirefox) {
+        message += 'Firefox supports PWA installation. Please check your browser settings or try refreshing.';
+      } else {
+        message += 'Please use Chrome, Edge, or Firefox for the best install experience.';
+      }
+      
+      alert(message);
       return;
     }
 
@@ -93,21 +118,23 @@ export default function PWAFeatures() {
       fontSize: 15
     }}>
       {online ? 'You are online' : 'You are offline'}
-      <button
-        style={{ 
-          marginLeft: 16, 
-          background: '#fff', 
-          color: '#333', 
-          border: 'none', 
-          borderRadius: 4, 
-          padding: '2px 10px', 
-          cursor: 'pointer',
-          opacity: 1
-        }}
-        onClick={handleInstall}
-      >
-        Install App
-      </button>
+      {!isStandalone && (
+        <button
+          style={{ 
+            marginLeft: 16, 
+            background: '#fff', 
+            color: '#333', 
+            border: 'none', 
+            borderRadius: 4, 
+            padding: '2px 10px', 
+            cursor: 'pointer',
+            opacity: 1
+          }}
+          onClick={handleInstall}
+        >
+          {installable ? 'Install App' : 'Add to Home'}
+        </button>
+      )}
     </div>
   );
 }
