@@ -13,9 +13,12 @@ export default function Prices() {
   const [allMarkets, setAllMarkets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [offline, setOffline] = useState(!navigator.onLine);
+  const [offline, setOffline] = useState(false);
 
   useEffect(() => {
+    // Set initial offline state after component mounts
+    setOffline(!navigator.onLine);
+    
     const handleOnline = () => setOffline(false);
     const handleOffline = () => setOffline(true);
     window.addEventListener('online', handleOnline);

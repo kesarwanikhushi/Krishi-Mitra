@@ -11,6 +11,21 @@ export default function PWAFeatures() {
     if (typeof window !== 'undefined') {
       const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       setIsStandalone(standalone);
+      
+      // If not installed, wait a bit then check if we can show install prompt
+      if (!standalone) {
+        setTimeout(() => {
+          // Check PWA installability criteria
+          const isPWAInstallable = 
+            window.location.protocol === 'https:' || 
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1';
+          
+          if (isPWAInstallable && !deferredPrompt) {
+            setInstallable(true); // Enable the button even without prompt
+          }
+        }, 2000);
+      }
     }
 
     const goOnline = () => setOnline(true);
@@ -47,7 +62,7 @@ export default function PWAFeatures() {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
-  }, []);
+  }, [deferredPrompt]);
 
   const handleInstall = async () => {
     // Check if app is already installed
@@ -62,50 +77,60 @@ export default function PWAFeatures() {
       return;
     }
 
-    // Check browser compatibility and provide specific guidance
+    // If we have the deferred prompt, use it
+    if (deferredPrompt) {
+      try {
+        // Show the install prompt
+        deferredPrompt.prompt();
+        
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+          alert('App installation started!');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        
+        // Clear the deferredPrompt so it can only be used once
+        setDeferredPrompt(null);
+        setInstallable(false);
+      } catch (error) {
+        console.error('Error during installation:', error);
+        alert('Installation failed. Please try again.');
+      }
+      return;
+    }
+
+    // Fallback: Provide manual installation instructions
     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
     const isEdge = /Edg/.test(navigator.userAgent);
     const isFirefox = /Firefox/.test(navigator.userAgent);
     const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
     
-    if (!deferredPrompt) {
-      let message = 'Install option not available right now. ';
-      
-      if (isSafari) {
-        message += 'On Safari, tap the Share button and select "Add to Home Screen".';
-      } else if (isChrome || isEdge) {
-        message += 'Try refreshing the page, or look for the install icon in your browser\'s address bar.';
-      } else if (isFirefox) {
-        message += 'Firefox supports PWA installation. Please check your browser settings or try refreshing.';
-      } else {
-        message += 'Please use Chrome, Edge, or Firefox for the best install experience.';
-      }
-      
-      alert(message);
-      return;
+    let message = 'To install this app:\n\n';
+    
+    if (isChrome) {
+      message += '• Look for the install icon (⊕) in the address bar\n';
+      message += '• Or click the 3-dot menu → "Install Krishi Mitra"\n';
+      message += '• Or click "Add to Home screen" from the menu';
+    } else if (isEdge) {
+      message += '• Look for the install icon (⊞) in the address bar\n';
+      message += '• Or click the 3-dot menu → "Apps" → "Install this site as an app"';
+    } else if (isSafari) {
+      message += '• Tap the Share button (□↗)\n';
+      message += '• Select "Add to Home Screen"\n';
+      message += '• Tap "Add" to confirm';
+    } else if (isFirefox) {
+      message += '• Click the 3-line menu → "Install"\n';
+      message += '• Or look for the install option in the address bar';
+    } else {
+      message += '• Try using Chrome, Edge, or Safari\n';
+      message += '• Look for "Install" or "Add to Home Screen" options in your browser menu';
     }
-
-    try {
-      // Show the install prompt
-      deferredPrompt.prompt();
-      
-      // Wait for the user to respond to the prompt
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-        alert('App installation started!');
-      } else {
-        console.log('User dismissed the install prompt');
-      }
-      
-      // Clear the deferredPrompt so it can only be used once
-      setDeferredPrompt(null);
-      setInstallable(false);
-    } catch (error) {
-      console.error('Error during installation:', error);
-      alert('Installation failed. Please try again.');
-    }
+    
+    alert(message);
   };
 
   return (
